@@ -39,7 +39,7 @@ runs:
     - name: Sends a Slack Notification
       uses: ChristopherHX/conditional@b4a9649204f81002ec9a4ef7d4bf7d6b2ab7fa55
       with:
-        if: ${{ steps.merge.outcome != 'success' }}
+        if: ${{ steps.merge.outputs.status == 'failure' }}
         step: |
           uses: rtCamp/action-slack-notify@v2
           env:
