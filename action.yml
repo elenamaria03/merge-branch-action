@@ -35,6 +35,7 @@ runs:
         source_ref: ${{ inputs.source-branch }}
         target_branch: ${{ inputs.target-branch }}
         commit_message_template: '[Automated] Merged {source_ref} into target {target_branch}'
+      continue-on-error: true
         
     - name: Sends a Slack Notification
       uses: ChristopherHX/conditional@b4a9649204f81002ec9a4ef7d4bf7d6b2ab7fa55
