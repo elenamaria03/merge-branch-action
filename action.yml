@@ -28,6 +28,7 @@ runs:
       with:
         repository: ${{ inputs.repository }}
     - name: Merge branches
+      id: merge
       uses: everlytic/branch-merge@1.1.2
       with:
         github_token: ${{ inputs.git-token }}
@@ -36,10 +37,16 @@ runs:
         commit_message_template: '[Automated] Merged {source_ref} into target {target_branch}'
         
     - name: Sends a Slack Notification
-      if: ${{ failure() }}
-      uses: rtCamp/action-slack-notify@v2
-      env:
-        SLACK_CHANNEL: ${{ inputs.slack-channel }}
-        SLACK_WEBHOOK: ${{ inputs.slack-link }}
-        SLACK_LINK_NAMES: true
-        SLACK_MESSAGE: 'Disregard this message. This is a test!'
+      uses: ChristopherHX/conditional@b4a9649204f81002ec9a4ef7d4bf7d6b2ab7fa55
+      with:
+        if: ${{ steps.merge.outcome != 'success' }}
+        step: |
+          uses: rtCamp/action-slack-notify@v2
+          env:
+            SLACK_CHANNEL: ${{ inputs.slack-channel }}
+            SLACK_WEBHOOK: ${{ inputs.slack-link }}
+            SLACK_LINK_NAMES: true
+            SLACK_MESSAGE: 'Disregard this message. This is a test!'
+            
+      
+      
